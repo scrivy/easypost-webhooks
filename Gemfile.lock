@@ -3,10 +3,14 @@ GEM
   specs:
     daemons (1.2.5)
     eventmachine (1.2.5)
+    mail (2.7.0)
+      mini_mime (>= 0.1.1)
+    mini_mime (1.0.0)
     mustermann (1.0.1)
     rack (2.0.3)
     rack-protection (2.0.0)
       rack
+    safe_yaml (1.0.4)
     sinatra (2.0.0)
       mustermann (~> 1.0)
       rack (~> 2.0)
@@ -22,6 +26,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  mail
+  safe_yaml
   sinatra
   thin
 
