@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'mail'
 require 'safe_yaml'
+require 'json'
 
 config = SafeYAML.load_file('config.yaml')
 
@@ -19,11 +20,14 @@ Mail.defaults do
 end
 
 post '/api/v1/easypost/webhook' do
+	request.body.rewind
+	data = JSON.parse request.body.read
+	result = data['result']
 	mail = Mail.new do
 		from config['from']
 		to config['to']
-		subject 'easypost webhook'
 	end
-	mail['body'] = request.body.read.to_s
+	mail['subject'] = result['id']
+	mail['body'] = result
 	mail.deliver!
 end
