@@ -1,3 +1,4 @@
+require 'active_support/security_utils'
 require 'sinatra'
 require 'mail'
 require 'safe_yaml'
@@ -20,6 +21,12 @@ Mail.defaults do
 end
 
 post '/api/v1/easypost/webhook' do
+	if request.content_type != "application/json"
+		halt 400
+	end
+	if !request.params.key?('secret') || !ActiveSupport::SecurityUtils.secure_compare(request.params['secret'], config['secret'])
+		halt 403
+	end
 	request.body.rewind
 	data = JSON.parse request.body.read
 	result = data['result']
