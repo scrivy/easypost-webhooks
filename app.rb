@@ -43,4 +43,6 @@ post '/api/v1/easypost/webhook' do
 		mail['body'] = 'your package is currently in ' + tracking_location['city'] + ', ' + tracking_location['state'] + "\nestimated delivery date: " + result['est_delivery_date'] + "\n" + result['public_url']
 		mail.deliver!
 	end
+
+	204
 end
