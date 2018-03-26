@@ -31,14 +31,16 @@ post '/api/v1/easypost/webhook' do
 	data = JSON.parse request.body.read
 	result = data['result']
 
-	tracking_detail = result['tracking_detail'].last
-	tracking_location = tracking_detail['tracking_location']
+	tracking_detail = result['tracking_details'].last
+	if tracking_detail
+		tracking_location = tracking_detail['tracking_location']
 
-	mail = Mail.new do
-		from config['from']
-		to config['to']
+		mail = Mail.new do
+			from config['from']
+			to config['to']
+		end
+		mail['subject'] = tracking_detail['message']
+		mail['body'] = 'your package is currently in ' + tracking_location['city'] + ', ' + tracking_location['state'] + "\nestimated delivery date: " + result['est_delivery_date'] + "\n" + result['public_url']
+		mail.deliver!
 	end
-	mail['subject'] = tracking_detail['message']
-	mail['body'] = 'your package is currently in ' + tracking_location['city'] + ', ' + tracking_location['state'] + "\nestimated delivery date: " + result['est_delivery_date'] + "\n" + result['public_url']
-	mail.deliver!
 end
