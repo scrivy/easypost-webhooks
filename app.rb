@@ -40,7 +40,7 @@ post '/api/v1/easypost/webhook' do
 			to config['to']
 		end
 		mail['subject'] = tracking_detail['message']
-		mail['body'] = 'your package is currently in ' + tracking_location['city'] + ', ' + tracking_location['state']
+		mail['body'] = 'your package is currently in ' + tracking_location['city']
 		est_delivery_date = result['est_delivery_date']
 		if est_delivery_date
 			mail['body'] += "\nestimated delivery date: " + est_delivery_date
