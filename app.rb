@@ -38,7 +38,7 @@ post '/api/v1/easypost/webhook' do
 			to config['to']
 		end
 		mail['subject'] = tracking_detail['message']
-		mail['body'] = "tracking_detail['message']\n\nyour package is currently in #{tracking_detail['tracking_location']['city']}\n\nestimated delivery date: #{result['est_delivery_date']}\n\n#{result['public_url']}"
+		mail['body'] = "#{tracking_detail['message']}\n\nyour package is currently in #{tracking_detail['tracking_location']['city']}\n\nestimated delivery date: #{result['est_delivery_date']}\n\n#{result['public_url']}"
 		mail.deliver!
 	end
 
