@@ -30,14 +30,23 @@ post '/api/v1/easypost/webhook' do
 	request.body.rewind
 	data = JSON.parse request.body.read
 	result = data['result']
-
+	tracker_id = result['id']
+	tracker_config = config['trackers'][tracker_id]
 	tracking_detail = result['tracking_details'].last
+
 	if tracking_detail
 		mail = Mail.new do
 			from config['from']
-			to config['to']
 		end
-		mail['subject'] = tracking_detail['message']
+
+		if tracker_config
+			mail['to'] = tracker_config['to']
+			mail['subject'] = "#{tracker_config['description']} update"
+		else
+			mail['to'] = config['to']
+			mail['subject'] = "#{tracker_id} update"
+		end
+
 		mail['body'] = "#{tracking_detail['message']}\n\nyour package is currently in #{tracking_detail['tracking_location']['city']}\n\nestimated delivery date: #{result['est_delivery_date']}\n\n#{result['public_url']}"
 		mail.deliver!
 	end
