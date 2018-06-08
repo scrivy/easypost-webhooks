@@ -21,7 +21,7 @@ Mail.defaults do
 end
 
 post '/api/v1/easypost/webhook' do
-	if request.content_type != "application/json"
+	if request.content_type != 'application/json'
 		halt 400
 	end
 	if !request.params.key?('secret') || !ActiveSupport::SecurityUtils.secure_compare(request.params['secret'], config['secret'])
@@ -30,6 +30,11 @@ post '/api/v1/easypost/webhook' do
 	request.body.rewind
 	data = JSON.parse request.body.read
 	result = data['result']
+
+	if result['object'] != 'Tracker'
+		halt 204
+	end
+
 	tracker_id = result['id']
 	tracker_config = config['trackers'][tracker_id]
 	tracking_detail = result['tracking_details'].last
@@ -51,5 +56,5 @@ post '/api/v1/easypost/webhook' do
 		mail.deliver!
 	end
 
-	204
+	'sent'
 end
