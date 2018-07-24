@@ -52,7 +52,7 @@ post '/api/v1/easypost/webhook' do
 			mail['subject'] = "#{tracker_id} update"
 		end
 
-		mail['body'] = "#{tracking_detail['message']}\n\nyour package is currently in #{tracking_detail['tracking_location']['city']}\n\nestimated delivery date: #{result['est_delivery_date']}\n\n#{result['public_url']}"
+		mail['body'] = "#{tracking_detail['message']}\n\nyour package is currently in #{tracking_detail['tracking_location']['city']}, #{tracking_detail['tracking_location']['state']}\n\nestimated delivery date: #{result['est_delivery_date']}\n\n#{result['public_url']}"
 		mail.deliver!
 	end
 
